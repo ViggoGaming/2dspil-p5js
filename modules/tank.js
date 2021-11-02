@@ -2,6 +2,10 @@ class Tank {
     constructor(x,y){
         this.pos = createVector(x,y);
         this.vel = createVector(0,0); 
+        this.width = 52;
+        this.height = 32;
+
+        this.scale = 2;
         // acc?
         this.angle = 0;
 
@@ -18,7 +22,6 @@ class Tank {
             backwards: 83,
             shoot: 32
         }
-
     }
 
     move(){
@@ -44,7 +47,7 @@ class Tank {
             this.shootTime = millis()
 
             let dir = createVector(cos(this.angle),sin(this.angle))
-            bullets.push(new Bullet(this.pos.x+dir.x*38,this.pos.y+dir.y*38,dir))
+            bullets.push(new Bullet(this.pos.x+dir.x*this.height*this.scale,this.pos.y+dir.y*this.height*this.scale,dir))
         }
     }
 
@@ -57,10 +60,11 @@ class Tank {
     render(){
         push()
         translate(this.pos.x,this.pos.y)
-        fill('blue')
+        //fill('blue')
         rotate(this.angle)
-        rect(-52/2,-32/2,52,32);
-        rect(0,-32/6,35,32/3)
+       // rect(-this.width/2*this.scale,-this.height/2*this.scale,this.width*this.scale,this.height*this.scale);
+        //rect(0,-this.height/6,35,this.height/3)
+        image(redTank, -this.width/2*this.scale, -this.height/2*this.scale, this.width*this.scale, this.height*this.scale);
         pop()
     }
 }

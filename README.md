@@ -10,3 +10,4 @@
 - [ ] Websockets (online multiplayer)
 - [ ] Grafik (sprites)
 
+The tanks are 321 x 606 (width, height)

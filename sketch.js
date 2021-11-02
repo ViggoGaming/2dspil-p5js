@@ -1,12 +1,24 @@
 let tank;
 let bullets = []
+var sprite
+
+function preload() {
+    redTank = loadImage("/sprites/tankRed.png");
+    blueTank = loadImage("/sprites/tankBlue.png");
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 function setup () {
-    createCanvas(500, 500);
+    createCanvas(windowWidth, windowHeight);
+    smooth(8)
     tank = new Tank(width/2,height/2)
 }
 
 function draw (){
+    
     background(220);
 
     tank.move()
