@@ -1,6 +1,6 @@
 let tank;
-let bullets = []
-var sprite
+let bullets = [];
+let walls = [];
 
 function preload() {
     redTank = loadImage("/sprites/tankRed.png");
@@ -15,6 +15,18 @@ function setup () {
     createCanvas(windowWidth, windowHeight);
     smooth(8)
     tank = new Tank(width/2,height/2)
+
+    for(var i=0; i<3; i++){
+        let randX = random(width)
+        let randY = random(height)
+        let r = random(0,2);
+
+        if(r < 1) {
+            walls.push(new Wall(randX,randY,randX+random(50,200),randY))
+        } else {
+            walls.push(new Wall(randX,randY,randX,randY+random(50,200)))
+        }
+    }
 }
 
 function draw (){
@@ -30,6 +42,11 @@ function draw (){
         bullet.render()
     }
     
+    for(var wall of walls){
+        wall.render()
+    }
+    
+
 }
 
 function mousePressed(){
