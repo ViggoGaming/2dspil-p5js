@@ -1,8 +1,6 @@
 let tank;
 let bullets = [];
-
 let walls = [];
-let testWall;
 
 function preload() {
     redTank = loadImage("/sprites/tankRed.png");
@@ -17,8 +15,11 @@ function setup () {
     createCanvas(windowWidth, windowHeight);
     smooth(8)
     tank = new Tank(width/2,height/2)
-    testWall = new Wall(100,100,100,500);
-
+    // Lodret 
+    walls.push(new Wall(100,100,100,500));
+    walls.push(new Wall(100,100,900,100));
+    walls.push(new Wall(900,100,900,500));
+    walls.push(new Wall(100,500,900,500));
 }
 
 function draw (){
@@ -29,12 +30,16 @@ function draw (){
     tank.update()
     tank.render()
 
-    for(var bullet of bullets){
-        bullet.update()
-        bullet.render()
+    for(var i=0; i<bullets.length; i++){
+        bullets[i].wallCollision()
+        bullets[i].update()
+        bullets[i].render()
+        bullets[i].checkLives(i)
     }
 
-    testWall.render()
+    for(var wall of walls){
+        wall.render()
+    }
     
 }
 

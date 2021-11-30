@@ -9,9 +9,12 @@ class Bullet {
 
         this.radius = 5;
         this.diameter = this.radius*2;
+
+        this.lives = 9999;
     }
 
     update(){
+
         this.dir.normalize().mult(this.speed)
         this.pos.add(this.dir)
     }
@@ -23,19 +26,31 @@ class Bullet {
         pop()
     }
 
-    wallCollision(wall){
+    wallCollision(){
 
-        let newX = this.pos+(this.dir.x*this.speed);
-        let newY = this.y+(this.dir.y*this.speed);
+        for(let wall of walls){
+            let newX = this.pos.x+this.dir.x;
+            let newY = this.pos.y+this.dir.y;
 
-        let wallX = wall.x;
-        let wallY = wall.y;
-        
+            //If x-direction intersects with wall, then reverse direction
+            if(AABBcollision(newX, this.pos.y, this.diameter, this.diameter, wall.x,wall.y,wall.width+(wall.xOffset*2),wall.height+(wall.yOffset*2))) {
+                this.lives--;
+                this.dir.x*=-1
+            }
 
-        if(AABBcollision(newX-this.radius,newY-this.radius,this.diameter,this.diameter,)){
-            
+            //If y-direction intersects with wall, then reverse direction
+            if(AABBcollision(this.pos.x, newY, this.diameter, this.diameter, wall.x,wall.y,wall.width+(wall.xOffset*2),wall.height+(wall.yOffset*2))){
+                this.lives--;
+                this.dir.y*=-1
+            }
         }
-
     }
+
+    // 
+    checkLives(i){
+        if(this.lives <= 0){bullets.splice(i,1)}
+    }
+
+    
 
 }

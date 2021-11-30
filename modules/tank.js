@@ -67,4 +67,23 @@ class Tank {
         image(redTank, -this.width/2*this.scale, -this.height/2*this.scale, this.width*this.scale, this.height*this.scale);
         pop()
     }
+
+    /*wallCollision(){
+
+        for(let wall of walls){
+
+            //If x-direction intersects with wall, then reverse direction
+            if(AABBcollision(newX, this.pos.y, this.diameter, this.diameter, wall.x,wall.y,wall.width+(wall.xOffset*2),wall.height+(wall.yOffset*2))) {
+                this.lives--;
+                this.dir.x*=-1
+            }
+
+            //If y-direction intersects with wall, then reverse direction
+            if(AABBcollision(this.pos.x, newY, this.diameter, this.diameter, wall.x,wall.y,wall.width+(wall.xOffset*2),wall.height+(wall.yOffset*2))){
+                this.lives--;
+                this.dir.y*=-1
+            }
+        }
+    }*/
+
 }
