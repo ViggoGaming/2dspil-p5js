@@ -10,4 +10,8 @@
 - [ ] Websockets (online multiplayer)
 - [ ] Grafik (sprites)
 
+## Ektra
+- [ ] Animations
+- [ ] Partikler
+
 The tanks are 321 x 606 (width, height)

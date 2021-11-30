@@ -12,7 +12,7 @@ class Tank {
         this.speed = 2;
         this.turningSpeed = 0.03;
 
-        this.cooldown = 1000 // I millisekunder
+        this.cooldown = 800 // I millisekunder
         this.shootTime = 0 // Sætter seneste skud tidspunkt
 
         this.inputs = {
@@ -47,7 +47,7 @@ class Tank {
             this.shootTime = millis()
 
             let dir = createVector(cos(this.angle),sin(this.angle))
-            bullets.push(new Bullet(this.pos.x+dir.x*this.height*this.scale,this.pos.y+dir.y*this.height*this.scale,dir))
+            bullets.push(new Bullet(this.pos.x+(dir.x*this.width/2)*this.scale,this.pos.y+(dir.y*this.width/2)*this.scale,dir))
         }
     }
 
