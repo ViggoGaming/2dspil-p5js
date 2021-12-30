@@ -1,10 +1,13 @@
 class Tank {
-    constructor(x,y){
+    constructor(x,y, color, keys){
         this.pos = createVector(x,y);
         this.vel = createVector(0,0); 
         this.width = 52;
         this.height = 32;
-
+        this.tankColor = color
+        this.keys = keys
+        console.log(this.keys)
+        
         this.scale = 2;
         // acc?
         this.angle = 0;
@@ -16,11 +19,11 @@ class Tank {
         this.shootTime = 0 // Sætter seneste skud tidspunkt
 
         this.inputs = {
-            forward: 87,
-            left: 65,
-            right: 68,
-            backwards: 83,
-            shoot: 32
+            forward: this.keys[0],
+            left: this.keys[1],
+            right: this.keys[2],
+            backwards: this.keys[3],
+            shoot: this.keys[4]
         }
     }
 
@@ -64,7 +67,8 @@ class Tank {
         rotate(this.angle)
        // rect(-this.width/2*this.scale,-this.height/2*this.scale,this.width*this.scale,this.height*this.scale);
         //rect(0,-this.height/6,35,this.height/3)
-        image(redTank, -this.width/2*this.scale, -this.height/2*this.scale, this.width*this.scale, this.height*this.scale);
+
+        image(this.tankColor, -this.width/2*this.scale, -this.height/2*this.scale, this.width*this.scale, this.height*this.scale);
         pop()
     }
 

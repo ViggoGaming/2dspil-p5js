@@ -11,10 +11,16 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
+
+
 function setup () {
     createCanvas(windowWidth, windowHeight);
     smooth(8)
-    tank = new Tank(width/2,height/2)
+
+    // Generer de to spillere
+    player1 = new Tank(width/2,height/2, redTank, [87, 65, 68, 83, 32])
+    player2 = new Tank(width/3,height/3, blueTank, [38, 37, 39, 40, 77])
+
     // Lodret 
     walls.push(new Wall(100,100,100,500));
     walls.push(new Wall(100,100,900,100));
@@ -26,9 +32,13 @@ function draw (){
     
     background(220);
 
-    tank.move()
-    tank.update()
-    tank.render()
+    player1.move()
+    player1.update()
+    player1.render()
+
+    player2.move()
+    player2.update()
+    player2.render()
 
     for(var i=0; i<bullets.length; i++){
         bullets[i].wallCollision()
@@ -44,7 +54,8 @@ function draw (){
 }
 
 function mousePressed(){
-    tank.shoot()
+    player1.shoot()
+    player2.shoot()
 }
 
 function AABBcollision (x1,y1,w1,h1,x2,y2,w2,h2){

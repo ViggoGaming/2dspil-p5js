@@ -10,7 +10,7 @@ class Bullet {
         this.radius = 5;
         this.diameter = this.radius*2;
 
-        this.lives = 9999;
+        this.lives = 3;
     }
 
     update(){
