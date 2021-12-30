@@ -29,7 +29,7 @@ cd 2dspil-p5js
 
 Installer pakker:
 ```
-node install --save
+npm install --save
 ```
 
 Start serveren:
