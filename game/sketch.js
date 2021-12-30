@@ -1,4 +1,5 @@
 let socket = io();
+//var socket = io('http://localhost:3000',{origins:"*"});
 //let startGame=false
 let tank;
 
@@ -29,7 +30,7 @@ function setup() {
 
     tank = new Tank(width / 2, height/2, redTank, [87, 65, 68, 83, 32])
 
-    socket.emit('playerJoin', {x: tank.pos.x, y: tank.pos.y, angle: tank.angle});
+    socket.emit('playerJoin', {x: tank.pos.x, y: tank.pos.y, angle: tank.angle, bulletX: tank.pos.bulletX, bulletY: tank.pos.bulletY});
 
     socket.on('serverUpdate', (data) => {
         tankData = data;
@@ -70,36 +71,30 @@ function draw() {
             // Tjekker om server-side tank og client-side tanks ligger oven på hinanden
             if(socket.id != tankData[i].id){
                 drawTank(tankData[i].x,tankData[i].y,tankData[i].angle)
-
-                if(gameData.bulletX && gameData.bulletY){
-
-                    for(var i=0; i<gameData.bulletX.length; i++){
-                        drawBullet(tankData[i].gameData.bulletX[i], tankData[i].gameData.bulletY[i])
-                    }
-                    
-                }
                 
-            }
-        }
+                console.log(tankData[i].bulletX)
+                if(tankData[i].bulletX && tankData[i].bulletY){
+                    for(var j=0; j<tankData[i].bulletX.length; j++){
+                        drawBullet(tankData[i].bulletX[j], tankData[i].bulletY[j])
+                    }
+                }
+            }      
+    }
 
         for (var wall of walls) {
             wall.render()
         }
 
 
-
-        let gameData = {
-            bulletX: [],
-            bulletY: []
-        }
+        var bulletX = [];
+        var bulletY = [];
 
         for (var i = 0; i < bullets.length; i++) {
-            gameData.bulletX.push(bullets[i].pos.x)
-            gameData.bulletY.push(bullets[i].pos.y)
+            bulletX.push(bullets[i].pos.x)
+            bulletY.push(bullets[i].pos.y)
         }
-
-        socket.emit('playerUpdate', {x: tank.pos.x, y: tank.pos.y, angle: tank.angle, gameData: gameData}); 
-    //}
+        
+        socket.emit('playerUpdate', {x: tank.pos.x, y: tank.pos.y, angle: tank.angle, bulletX: bulletX, bulletY: bulletY}); 
 }
 
 function mousePressed() {
@@ -126,4 +121,5 @@ function drawBullet(xpos,ypos){
     fill(0)
     ellipse(xpos,ypos,10)
     pop()
+    console.log(xpos, ypos)
 }

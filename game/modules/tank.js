@@ -52,7 +52,7 @@ class Tank {
             bullets.push(new Bullet(this.pos.x + (dir.x * this.width / 2) * this.scale, this.pos.y + (dir.y * this.width / 2) * this.scale, dir))
         }
     }
-
+    
     update(dt) {
         if (!dt) dt = 1 / 60;
 

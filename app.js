@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
       console.log(socket.id + " " + data.x + " " + data.y + " " + data.angle);
     }
 
-    var player = new Player(socket.id, data.x, data.y, data.angle);
+    var player = new Player(socket.id, data.x, data.y, data.angle, data.bulletX, data.bulletY);
     players.push(player);
   })
 
@@ -37,9 +37,9 @@ io.on('connection', (socket) => {
       player.x = data.x;
       player.y = data.y;
       player.angle = data.angle;
-      player.gameData = data.gameData
+      player.bulletX = data.bulletX
+      player.bulletY = data.bulletY
     }
-    console.log(player)
   })
 
   socket.on('disconnect', () => {
@@ -72,10 +72,11 @@ server.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
 })
 
-function Player(id, x, y, angle) {
+function Player(id, x, y, angle, bulletX, bulletY) {
   this.id = id;
   this.x = x;
   this.y = y;
   this.angle = angle
-  this.gameData = {}
+  this.bulletX = bulletX
+  this.bulletY = bulletY
 }
