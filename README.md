@@ -15,3 +15,24 @@
 - [ ] Partikler
 
 Tanks er 321 x 606 (width, height)
+
+# Usage
+Start med at hente koden ned:
+```bash
+git clone https://github.com/ViggoGaming/2dspil-p5js
+```
+
+Gå ind i mappen:
+```
+cd 2dspil-p5js
+```
+
+Installer pakker:
+```
+node install --save
+```
+
+Start serveren:
+```
+node app.js
+```
