@@ -1,17 +1,17 @@
-# 2D spil med AI
+# 2D spil tank spil i p5.js
 
 ## Todo
 - [x] Tank spiller (funktionalitet som at skyde, dreje osv.)
 - [x] Tilføj en nedkøling til skud 
 - [ ] En level generator
 - [ ] AI (Bruger A*, til at navigere)
-- [ ] Lokal multiplayer (coop)
+- [x] Lokal multiplayer (coop)
 - [ ] Upgrades (Hvis vi har tid)
-- [ ] Websockets (online multiplayer)
-- [ ] Grafik (sprites)
+- [x] Websockets (online multiplayer)
+- [x] Grafik (sprites)
 
 ## Ektra
 - [ ] Animations
 - [ ] Partikler
 
-The tanks are 321 x 606 (width, height)
+Tanks er 321 x 606 (width, height)

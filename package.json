@@ -1,0 +1,23 @@
+{
+  "name": "2dspil_online",
+  "version": "1.0.0",
+  "description": "## Todo - [x] Tank spiller (funktionalitet som at skyde, dreje osv.) - [x] Tilføj en nedkøling til skud  - [ ] En level generator - [ ] AI (Bruger A*, til at navigere) - [ ] Lokal multiplayer (coop) - [ ] Upgrades (Hvis vi har tid) - [ ] Websockets (online multiplayer) - [ ] Grafik (sprites)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ViggoGaming/2dspil-p5js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ViggoGaming/2dspil-p5js/issues"
+  },
+  "homepage": "https://github.com/ViggoGaming/2dspil-p5js#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "socket.io": "^4.4.0"
+  }
+}
