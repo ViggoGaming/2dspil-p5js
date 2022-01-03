@@ -11,12 +11,16 @@ class Bullet {
         this.diameter = this.radius*2;
 
         this.lives = 3;
+
+        this.boundingBox = null;
+        this.SATresponse = new SAT.Response();
     }
 
     update(){
 
         this.dir.normalize().mult(this.speed)
         this.pos.add(this.dir)
+        this.updateBoundingBox()
     }
 
     render(){
@@ -25,6 +29,15 @@ class Bullet {
         ellipse(this.pos.x,this.pos.y,this.diameter)
         pop()
     }
+
+    updateBoundingBox(){
+        if(!this.boundingBox){
+            this.boundingBox = new SAT.Circle(new SAT.Vector(this.pos.x,this.pos.y), this.radius);
+        } else if(this.boundingBox){
+            this.boundingBox.pos.x = this.pos.x;
+            this.boundingBox.pos.y = this.pos.y;
+        }
+    }  
 
     wallCollision(){
 
@@ -46,11 +59,19 @@ class Bullet {
         }
     }
 
-    // 
+    // Check lives
     checkLives(i){
         if(this.lives <= 0){bullets.splice(i,1)}
     }
 
-    
+    tankCollision(){
+
+        this.SATresponse.clear();
+        var collided = SAT.testCirclePolygon(this.boundingBox, tank.boundingBox, this.SATresponse);
+        if(collided){
+            tank.alive = false;
+        }
+
+    }
 
 }

@@ -17,6 +17,11 @@ class Tank {
         this.cooldown = 800 // I millisekunder
         this.shootTime = 0 // Sætter seneste skud tidspunkt
 
+        this.alive = true
+
+        this.boundingBox = null;
+        this.SATresponse = new SAT.Response();
+
         this.inputs = {
             forward: this.keys[0],
             left: this.keys[1],
@@ -49,47 +54,53 @@ class Tank {
             this.shootTime = millis()
 
             let dir = createVector(cos(this.angle), sin(this.angle))
-            bullets.push(new Bullet(this.pos.x + (dir.x * this.width / 2) * this.scale, this.pos.y + (dir.y * this.width / 2) * this.scale, dir))
+            bullets.push(new Bullet(this.pos.x + (dir.x * (this.width+2) / 2) * this.scale, this.pos.y + (dir.y * (this.width+2) / 2) * this.scale, dir))
         }
     }
     
-    update(dt) {
-        if (!dt) dt = 1 / 60;
-
+    update() {
         // tilføj dt her
         this.vel.normalize().mult(this.speed)
         this.pos.add(this.vel)
         this.vel.set(0, 0);
+        this.updateBoundingBox()
     }
 
     render() {
         push()
         translate(this.pos.x, this.pos.y)
-        //fill('blue')
         rotate(this.angle)
-        // rect(-this.width/2*this.scale,-this.height/2*this.scale,this.width*this.scale,this.height*this.scale);
-        //rect(0,-this.height/6,35,this.height/3)
-
         image(this.tankColor, -this.width / 2 * this.scale, -this.height / 2 * this.scale, this.width * this.scale, this.height * this.scale);
         pop()
+
+        if(debug){
+            this.boundingBox.draw()
+        }
     }
 
-    /*wallCollision(){
+    updateBoundingBox(){
+       
+        let vertices = getCornersOfRect(this.angle,this.width*this.scale,this.height*this.scale)
+        if(!this.boundingBox){
+            this.boundingBox = new SAT.Polygon(new SAT.Vector(this.pos.x,this.pos.y), vertices);
+        } else if(this.boundingBox){
+            this.boundingBox.pos.x = this.pos.x;
+            this.boundingBox.pos.y = this.pos.y;
+            this.boundingBox.setPoints(vertices)
+        }
+        
+    }
+
+    wallCollision(){
 
         for(let wall of walls){
-
-            //If x-direction intersects with wall, then reverse direction
-            if(AABBcollision(newX, this.pos.y, this.diameter, this.diameter, wall.x,wall.y,wall.width+(wall.xOffset*2),wall.height+(wall.yOffset*2))) {
-                this.lives--;
-                this.dir.x*=-1
+            this.SATresponse.clear();
+            var collided = SAT.testPolygonPolygon(this.boundingBox, wall.boundingBox, this.SATresponse);
+            if(collided){
+                this.pos.x -= this.SATresponse.overlapV.x;
+                this.pos.y -= this.SATresponse.overlapV.y;
             }
-
-            //If y-direction intersects with wall, then reverse direction
-            if(AABBcollision(this.pos.x, newY, this.diameter, this.diameter, wall.x,wall.y,wall.width+(wall.xOffset*2),wall.height+(wall.yOffset*2))){
-                this.lives--;
-                this.dir.y*=-1
-            }
-        }
-    }*/
-
+        }  
+        
+    }   
 }

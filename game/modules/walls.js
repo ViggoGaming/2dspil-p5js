@@ -16,12 +16,26 @@ class Wall {
         this.xOffset = this.stroke/2;
     }
 
+    this.calcCollider()
+
   }
+
+  calcCollider(){
+    
+    this.boundingBox = new SAT.Box(new SAT.Vector(this.x,this.y),this.width+(this.xOffset*2),this.height+(this.yOffset*2)).toPolygon();
+
+  }
+
   render() {
     fill(this.color);
 
     //rect(this.x-this.xOffset, this.y-this.yOffset, this.width+(this.xOffset*2), this.height+(this.yOffset*2));
 
     rect(this.x, this.y, this.width+(this.xOffset*2), this.height+(this.yOffset*2));
+
+    if(debug){
+      this.boundingBox.draw()
+    }
+
   }
 }

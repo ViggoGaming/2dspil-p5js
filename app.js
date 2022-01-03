@@ -66,6 +66,12 @@ function serverUpdate() {
 
 }
 
+function playerHit() {
+
+  socket.on('playerHit', players);
+
+}
+
 setInterval(serverUpdate, 1000 / 60);
 
 server.listen(PORT, () => {
