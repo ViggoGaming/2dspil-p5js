@@ -11,12 +11,6 @@ let walls = [];
 
 let debug = false;
 
-// <-- SAT
-//var P = SAT.Polygon;
-//var V = SAT.Vector;
-//var B = SAT.Box;
-//var C = SAT.Circle;
-
 SAT.Polygon.prototype.draw = function(){  
     var i = this.points.length;
     push()
@@ -50,7 +44,7 @@ function setup() {
 
     tank = new Tank(width / 2, height/2, redTank, [87, 65, 68, 83, 32])
 
-    socket.emit('playerJoin', {x: tank.pos.x, y: tank.pos.y, angle: tank.angle, bulletX: tank.pos.bulletX, bulletY: tank.pos.bulletY});
+    socket.emit('playerJoin', {x: tank.pos.x, y: tank.pos.y, angle: tank.angle, bulletX: tank.pos.bulletX, bulletY: tank.pos.bulletY, alive: tank.alive});
 
     socket.on('serverUpdate', (data) => {
         tankData = data;
@@ -93,13 +87,14 @@ function draw() {
 
         for (var i = 0; i < tankData.length; i++) {
             // Tjekker om server-side tank og client-side tanks ligger oven på hinanden
-            if(socket.id != tankData[i].id){
+            if(socket.id != tankData[i].id && tankData[i].alive){
                 drawTank(tankData[i].x,tankData[i].y,tankData[i].angle)
                 
-             //   console.log(tankData[i].bulletX)
+             //console.log(tankData[i].bulletX)
                 if(tankData[i].bulletX && tankData[i].bulletY){
                     for(var j=0; j<tankData[i].bulletX.length; j++){
                         drawBullet(tankData[i].bulletX[j], tankData[i].bulletY[j])
+                        testServerBulletTankCollision(tankData[i].bulletX[j], tankData[i].bulletY[j]);
                     }
                 }
             }      
@@ -118,12 +113,15 @@ function draw() {
             bulletY.push(bullets[i].pos.y)
         }
         
-        socket.emit('playerUpdate', {x: tank.pos.x, y: tank.pos.y, angle: tank.angle, bulletX: bulletX, bulletY: bulletY}); 
+        if(tank.alive){
+            socket.emit('playerUpdate', {x: tank.pos.x, y: tank.pos.y, angle: tank.angle, bulletX: bulletX, bulletY: bulletY}); 
+        }
 }
 
 function mousePressed() {
-    tank.shoot()
-    // tank2.shoot()
+    if(tank.alive){
+        tank.shoot()
+    }
 }
 
 function AABBcollision(x1, y1, w1, h1, x2, y2, w2, h2) {
@@ -174,4 +172,17 @@ function drawBullet(xpos,ypos){
     fill(0)
     ellipse(xpos,ypos,10)
     pop()
+}
+
+function testServerBulletTankCollision(xpos, ypos){
+
+    var boundingBox = new SAT.Circle(new SAT.Vector(xpos,ypos), 5);
+    
+    var collided = SAT.testCirclePolygon(boundingBox, tank.boundingBox);
+    if(collided) {
+        console.log("Collided with server-side bullet")
+        tank.alive = false;
+        socket.emit('playerHit', {alive: tank.alive})
+    }
+
 }

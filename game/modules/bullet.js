@@ -68,8 +68,9 @@ class Bullet {
 
         this.SATresponse.clear();
         var collided = SAT.testCirclePolygon(this.boundingBox, tank.boundingBox, this.SATresponse);
-        if(collided){
+        if(collided) {
             tank.alive = false;
+            socket.emit('playerHit', {alive: tank.alive})
         }
 
     }
