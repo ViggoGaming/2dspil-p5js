@@ -1,45 +1,44 @@
 class Tank {
-    constructor(x, y, color, keys) {
+    constructor(x, y) {
         this.pos = createVector(x, y);
         this.vel = createVector(0, 0);
         this.width = 52;
         this.height = 32;
-        this.tankColor = color
-        this.keys = keys
 
         this.scale = 2;
-        // acc?
         this.angle = 0;
 
-        this.speed = 2;
-        this.turningSpeed = 0.03;
+        this.speed = 240;
+        this.turningSpeed = 5;
 
-        this.cooldown = 800 // I millisekunder
+        this.cooldown = 1000 // I millisekunder
         this.shootTime = 0 // Sætter seneste skud tidspunkt
 
-        this.alive = true
+        this.alive = true;
 
         this.boundingBox = null;
         this.SATresponse = new SAT.Response();
 
         this.inputs = {
-            forward: this.keys[0],
-            left: this.keys[1],
-            right: this.keys[2],
-            backwards: this.keys[3],
-            shoot: this.keys[4]
+            forward: 87,
+            left: 65,
+            right: 68,
+            backwards: 83,
+            shoot: 32
         }
+
     }
 
     move() {
 
-        if (keyIsDown(this.inputs.left)) this.angle -= this.turningSpeed;
-        if (keyIsDown(this.inputs.right)) this.angle += this.turningSpeed;
+        if (keyIsDown(this.inputs.left)) this.angle -= this.turningSpeed*Time.deltaTime;
+        if (keyIsDown(this.inputs.right)) this.angle += this.turningSpeed*Time.deltaTime;
 
-        if (keyIsDown(this.inputs.forward)) {
-            this.vel.add(cos(this.angle), sin(this.angle))
-        } else if (keyIsDown(this.inputs.backwards)) {
-            this.vel.add(-cos(this.angle), -sin(this.angle))
+        if(keyIsDown(this.inputs.forward)){
+            this.vel.add( cos(this.angle), sin(this.angle))
+        } 
+        if(keyIsDown(this.inputs.backwards)){
+            this.vel.add( -cos(this.angle), -sin(this.angle))
         }
 
         if (keyIsDown(this.inputs.shoot)) {
@@ -54,13 +53,12 @@ class Tank {
             this.shootTime = millis()
 
             let dir = createVector(cos(this.angle), sin(this.angle))
-            bullets.push(new Bullet(this.pos.x + (dir.x * (this.width+2) / 2) * this.scale, this.pos.y + (dir.y * (this.width+2) / 2) * this.scale, dir))
+            bullets.push(new Bullet(this.pos.x + (dir.x * (this.width) / 2) * this.scale, this.pos.y + (dir.y * (this.width) / 2) * this.scale, dir))
         }
     }
     
     update() {
-        // tilføj dt her
-        this.vel.normalize().mult(this.speed)
+        this.vel.normalize().mult(this.speed).mult(Time.deltaTime)
         this.pos.add(this.vel)
         this.vel.set(0, 0);
         this.updateBoundingBox()
@@ -68,14 +66,15 @@ class Tank {
 
     render() {
         push()
-        translate(this.pos.x, this.pos.y)
+        translate(this.pos.x,this.pos.y)
         rotate(this.angle)
-        image(this.tankColor, -this.width / 2 * this.scale, -this.height / 2 * this.scale, this.width * this.scale, this.height * this.scale);
+        image(redTank, -this.width/2*this.scale, -this.height/2*this.scale, this.width*this.scale, this.height*this.scale);
         pop()
 
         if(debug){
             this.boundingBox.draw()
         }
+
     }
 
     updateBoundingBox(){

@@ -3,21 +3,24 @@ class Maze {
     constructor(rows,cols){
         this.rows = rows;
         this.cols = cols;
-        this.tileSize = min(width/rows,height/cols); //Math.min(width/rows,height/cols);
+        this.tileSize = 250;
 
         this.tiles = []
         this.mazeStack = []
 
         this.currentTile;
-        this.nextTile;        //can write as one line
+        this.nextTile;
 
         this.visitSum = 1;
 
-        //this.init()      //make so a startkey can be passed as parameter
-                           //and optimize function
     }
 
     init(){
+
+        //Used for Camera
+        this.mazeWidth = this.rows*this.tileSize;
+        this.mazeHeight = this.cols*this.tileSize;
+
         //Creates 2D-array with tiles
         for(var x=0; x<this.rows; x++){
             this.tiles[x] = [];
@@ -66,7 +69,7 @@ class Maze {
                 
                 let tileX = x*this.tileSize;
                 let tileY = y*this.tileSize;
-
+                
                 if(this.tiles[x][y].walls[0])
                     line(tileX,tileY,tileX+this.tileSize,tileY);
                 if(this.tiles[x][y].walls[1])
@@ -118,7 +121,7 @@ class Maze {
         }
     }
 
-    mazeToWalls(){
+    mazeToWalls(deletionProbability){
         //Converts maze "walls" to actual walls usuable in game
         //Output: array consisting of wall objects
         var wallsArr = [];
@@ -130,17 +133,34 @@ class Maze {
                 let tileX = x*this.tileSize;
                 let tileY = y*this.tileSize;
 
-                if(tile.row > 0 && tile.walls[1]){
+                if(tile.row > 0 && tile.walls[1] && random(1) > deletionProbability){
                     wallsArr.push(new Wall(tileX,tileY,tileX,tileY+this.tileSize))
                 }
 
-                if(tile.col > 0 && tile.walls[0]){
+                if(tile.col > 0 && tile.walls[0] && random(1) > deletionProbability){
                     wallsArr.push(new Wall(tileX,tileY,tileX+this.tileSize,tileY))
                 }
             }
         }
 
+        //Borders of the maze, very spaghetti but must be done
+        var mazeWidth = this.rows*this.tileSize;
+        var mazeHeight = this.cols*this.tileSize;
+
+        wallsArr.push(new Wall(0,0,mazeWidth,0))
+        wallsArr.push(new Wall(0,0,0,mazeHeight))
+        wallsArr.push(new Wall(0,mazeHeight,mazeWidth,mazeHeight))
+        wallsArr.push(new Wall(mazeWidth,0,mazeWidth,mazeHeight))
+
         return wallsArr;
+    }
+
+    getRandomTile(){
+        let tile = this.tiles[round(random(0,this.rows-1))][round(random(0,this.cols-1))]
+        let tileX = tile.row*this.tileSize;
+        let tileY = tile.col*this.tileSize;
+        let center = createVector(tileX+this.tileSize/2,tileY+this.tileSize/2)
+        return center;
     }
 
 }

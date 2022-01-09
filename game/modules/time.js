@@ -7,9 +7,9 @@ class Time {
     static timeScale = 1;
 
     static Update () {
-        this.previousFrame = this.currentFrame;
         this.currentFrame = performance.now(); 
         this.dt = (this.currentFrame - this.previousFrame)/1000;
+        this.previousFrame = this.currentFrame;
     }
 
     static get deltaTime () {

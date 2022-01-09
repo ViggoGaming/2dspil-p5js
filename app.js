@@ -1,8 +1,3 @@
-//const maze = require('./game/modules/mazeNode')
-//const tile = require('./game/modules/tile')
-//let Tile = new tile()
-//let Maze = new maze()
-
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
@@ -18,6 +13,10 @@ app.get('/', (req, res) => {
 })
 
 io.on('connection', (socket) => {
+
+  socket.on('getSeed', (callback)=>{
+    callback(mapseed)
+  })
 
   socket.on('playerJoin', (data) => {
     if (DEBUG) {
@@ -54,14 +53,16 @@ io.on('connection', (socket) => {
         break;
       }
     }
-
     if (player != undefined) {
       player.alive = data.alive;
     }
   })
 
+  socket.on('ping', ()=> {
+    socket.emit('pong');
+  })
+
   socket.on('disconnect', () => {
-    console.log('Disconnect' + socket.id);
     var player;
     for (var i = 0; i < players.length; i++) {
       if (players[i].id == socket.id) {
@@ -76,8 +77,7 @@ io.on('connection', (socket) => {
 
 
 var players = [];
-//var map;
-
+var mapseed = Math.floor(Math.random()*99999)
 
 function serverUpdate() {
 
@@ -87,7 +87,7 @@ function serverUpdate() {
 
 setInterval(serverUpdate, 1000 / 60);
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`Listening on port: ${PORT}`);
 })
 
@@ -100,10 +100,3 @@ function Player(id, x, y, angle, bulletX, bulletY, alive) {
   this.bulletY = bulletY;
   this.alive = alive;
 }
-
-/*map = new Maze(4,4)
-maze.init()
-maze.generateMaze(()=>{
-  //maze.render()
-  walls = maze.mazeToWalls()
-})*/

@@ -5,20 +5,21 @@ class Bullet {
         // Type p5.Vector
         this.dir = dir;
 
-        this.speed = 4;
+        this.speed = 340;
 
         this.radius = 5;
         this.diameter = this.radius*2;
 
-        this.lives = 3;
+        this.lives = 5;
 
+        this.inTank = true;
         this.boundingBox = null;
         this.SATresponse = new SAT.Response();
     }
 
     update(){
 
-        this.dir.normalize().mult(this.speed)
+        this.dir.normalize().mult(this.speed).mult(Time.deltaTime)
         this.pos.add(this.dir)
         this.updateBoundingBox()
     }
@@ -47,12 +48,14 @@ class Bullet {
 
             //If x-direction intersects with wall, then reverse direction
             if(AABBcollision(newX, this.pos.y, this.diameter, this.diameter, wall.x,wall.y,wall.width+(wall.xOffset*2),wall.height+(wall.yOffset*2))) {
+                this.inTank = false
                 this.lives--;
                 this.dir.x*=-1
             }
 
             //If y-direction intersects with wall, then reverse direction
             if(AABBcollision(this.pos.x, newY, this.diameter, this.diameter, wall.x,wall.y,wall.width+(wall.xOffset*2),wall.height+(wall.yOffset*2))){
+                this.inTank = false
                 this.lives--;
                 this.dir.y*=-1
             }
@@ -65,14 +68,16 @@ class Bullet {
     }
 
     tankCollision(){
-
-        this.SATresponse.clear();
-        var collided = SAT.testCirclePolygon(this.boundingBox, tank.boundingBox, this.SATresponse);
-        if(collided) {
-            tank.alive = false;
-            socket.emit('playerHit', {alive: tank.alive})
+        if(tank.alive){
+            this.SATresponse.clear();
+            var collided = SAT.testCirclePolygon(this.boundingBox, tank.boundingBox, this.SATresponse);
+            if(collided && !this.inTank) {
+                tank.alive = false;
+                socket.emit('playerHit', {alive: tank.alive})
+            } else if(!collided && this.inTank) {
+                this.inTank = false
+            }
         }
-
     }
 
 }

@@ -6,22 +6,34 @@
     integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
     crossorigin="anonymous"></script>
   <script src="./libraries/p5.js"></script>
-  <script src="./libraries/p5.sound.min.js"></script>
   <script src="./libraries/SAT.js"></script></script>
   <link rel="stylesheet" type="text/css" href="style.css">
   <meta charset="utf-8">
 </head>
 
 <body>
+
+  <div id="ui">
+    <div id="FPScounter">
+      <p>FPS: 60</p>
+    </div>
+    <div id="Pingcounter">
+      <p>Ping: 0</p>
+    </div>
+  </div>
+
 </body>
+
 <!-- Imports modules from the modules folder -->
 <script src="./modules/time.js"></script>
+<script src="./modules/camera.js"></script>
 <script src="./modules/bullet.js"></script>
 <script src="./modules/tank.js"></script>
-<script src="./modules/tankRender.js"></script>
 <script src="./modules/walls.js"></script>
-<script src="modules/maze.js"></script>
 <script src="modules/tile.js"></script>
+<script src="modules/maze.js"></script>
 <script src="sketch.js"></script>
+
+<script src="modules/ui.js"></script>
 
 </html>
